@@ -34,7 +34,7 @@
       "inet4_range": "198.18.0.0/15",
       "inet6_range": "fc00::/18"
     },
-    "final": "localDns",
+    "final": "proxyDns",
     "independent_cache": true,
     "strategy": "prefer_ipv4"
   },
