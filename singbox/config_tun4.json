@@ -72,7 +72,7 @@
     { "tag": "🍡 Meta", "type": "selector", "outbounds": ["🇺🇲 美国自动","🔯 香港自动", "🚀 节点选择", "♻️ 自动选择", "🇭🇰 香港节点", "KR 韩国自动","TW 台湾自动",  "🐸 手动切换"] },
     { "tag": "💢 Pornhub", "type": "selector", "outbounds": ["🇺🇲 美国自动","🔯 香港自动", "🚀 节点选择", "♻️ 自动选择", "🇭🇰 香港节点", "KR 韩国自动","TW 台湾自动",  "🐸 手动切换"] },
     { "tag": "🍎 Apple", "type": "selector", "outbounds": ["🎯 全球直连", "🔯 香港自动", "KR 韩国自动", "STW 台湾自动","🇺🇲 美国自动"] },
-    { "tag": "🐸 手动切换", "type": "selector", "outbounds": ["{all}"] , "filter": [{ "action": "include", "keywords": ["US|HK|JP|TW|KR"] }] },
+    { "tag": "🐸 手动切换", "type": "selector", "outbounds": ["{all}"] , "filter": [{ "action": "include", "keywords": ["US|HK|TW|KR"] }] },
     { "tag": "🇭🇰 香港节点", "type": "selector", "outbounds": ["{all}"], "filter": [{ "action": "include", "keywords": ["🇭🇰|HK|hk|香港|港|HongKong"] }] },
     { "tag": "KR 韩国自动", "type": "urltest", "outbounds": ["{all}"], "filter": [{ "action": "include", "keywords": ["KR|kr|Kr|kR|韩国"] }], "url": "http://www.gstatic.com/generate_204", "interval": "10m", "tolerance": 50 },
     { "tag": "🇺🇲 美国自动", "type": "urltest", "outbounds": ["{all}"], "filter": [{ "action": "include", "keywords": ["🇺🇸|US|us|美国|美|United States"] }] , "url": "http://www.gstatic.com/generate_204", "interval": "10m", "tolerance": 50},
