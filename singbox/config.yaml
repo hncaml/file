@@ -124,10 +124,10 @@ proxies:
   udp: true
  
 # 锚点
-pr: &pr {type: select, proxies: [🚀 节点选择,  ♻️ 香港自动, ♻️ 日本自动,♻️ 新加坡自动, ♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, 🌐 全部节点, 🟢 直连，REJECT]}
+pr: &pr {type: select, proxies: [🚀 节点选择,  ♻️ 香港自动, ♻️ 日本自动,♻️ 新加坡自动, ♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, 🌐 全部节点, 🟢 直连]}
 # 策略组
 proxy-groups:
-  - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, 🌐 全部节点, 🟢 直连，REJECT]}
+  - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, 🌐 全部节点, 🟢 直连]}
   - {name: 📹 YouTube,!!merge <<: *pr}
   - {name: 🐛 cloudflare,!!merge <<: *pr}
   - {name: 💞 pornhub,!!merge <<: *pr}
@@ -155,8 +155,7 @@ proxy-groups:
   - {name: ♻️ 美国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$"}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "^((?!(直连)).)*$"}
   - {name: 🌐 全部节点, type: select, include-all: true}
-  - {name: 🟢 直连, type: direct}
-  - {name: REJECT, type: block}
+
 rules:
   - DOMAIN-SUFFIX,camxl.top,🟢 直连
   - DOMAIN-SUFFIX,dkys.org,REJECT
