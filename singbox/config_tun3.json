@@ -92,6 +92,8 @@
       { "clash_mode": "direct", "outbound": "🎯 全球直连" },
       { "clash_mode": "global", "outbound": "GLOBAL" },
       { "domain": ["clash.razord.top", "yacd.metacubex.one", "yacd.haishan.me", "d.metacubex.one", "tjupt.org"], "outbound": "🎯 全球直连" },
+      { "type": "field", "outbound": "🎯 全球直连","domain": ["camxl.top"]},
+      { "type": "field", "outbound": "block","domain": ["dkys.org","youtusoft.com","hostbuf.com","tcpspeed.com","wn1998.com"]},
       { "ip_is_private": true, "outbound": "🎯 全球直连" },
       { "rule_set": "geosite-openai", "outbound": "🤖 OpenAI" },
       { "rule_set": "geosite-youtube", "outbound": "📹 YouTube" },
