@@ -102,13 +102,16 @@ dns:
       - "https://dns.google/dns-query"
  
 # 锚点
-pr: &pr {type: select, proxies: [🚀 节点选择, 🔯 香港故转, 🔯 日本故转, ♻️ 香港自动, ♻️ 日本自动, ♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇺🇲 美国节点, 🌐 全部节点]}
+pr: &pr {type: select, proxies: [🚀 节点选择, ♻️ 香港自动, ♻️ 日本自动, ♻️ 美国自动,♻️ 英国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, uk 英国节点,🌐 全部节点, DIRECT]}
 # 策略组
 proxy-groups:
-  - {name: 🚀 节点选择, type: select, proxies: [🔯 香港故转, 🔯 日本故转, ♻️ 香港自动, ♻️ 日本自动, ♻️ 美国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇺🇲 美国节点, 🌐 全部节点]}
+  - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动, ♻️ 英国自动, ♻️ 自动选择, 🇭🇰 香港节点, 🇯🇵 日本节点,  SG 新加坡节点,🇺🇲 美国节点,k 英国节点, 🌐 全部节点, DIRECT]}
   - {name: 📹 YouTube,!!merge <<: *pr}
+  - {name: 🐛 cloudflare,!!merge <<: *pr}
+  - {name: 💞 pornhub,!!merge <<: *pr}
   - {name: 🍀 Google,!!merge <<: *pr}
   - {name: 🤖 ChatGPT,!!merge <<: *pr}
+  - {name: 💢 Meta,!!merge <<: *pr}
   - {name: 👨🏿‍💻 GitHub,!!merge <<: *pr}
   - {name: 🐬 OneDrive,!!merge <<: *pr}
   - {name: 🪟 Microsoft,!!merge <<: *pr}
@@ -122,19 +125,30 @@ proxy-groups:
   - {name: 🐟 漏网之鱼,!!merge <<: *pr}
   - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)港|hk|hongkong|hong kong"}
   - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)日|jp|japan"}
+  - {name: SG 新加坡节点, type: select, include-all: true, filter: "(?i)新|sg|SG|Singapore"}
   - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)美|us|unitedstates|united states"}
-  - {name: 🔯 香港故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
-  - {name: 🔯 日本故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }
+  - {name: uk 英国节点, type: select, include-all: true, filter: "(?i)英|uk|UK|United Kingdom"}
   - {name: ♻️ 香港自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
   - {name: ♻️ 日本自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }
+  - {name: ♻️ 新加坡自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }
   - {name: ♻️ 美国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$"}
+  - {name: ♻️ 英国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?=.*(英|uk|(?i)UK|Kingdom))^((?!(港|台|日|韩|新)).)*$"}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "^((?!(直连)).)*$"}
   - {name: 🌐 全部节点, type: select, include-all: true}
 rules:
+  - DOMAIN-SUFFIX,camxl.top,DIRECT
+  - DOMAIN-SUFFIX,dkys.org,REJECT
+  - DOMAIN-SUFFIX,youtusoft.com,REJECT
+  - DOMAIN-SUFFIX,hostbuf.com,REJECT
+  - DOMAIN-SUFFIX,tcpspeed.com,REJECT
+  - DOMAIN-SUFFIX,wn1998.com,REJECT
   - RULE-SET,private_domain,DIRECT
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,proxylite,🚀 节点选择
   - RULE-SET,ai,🤖 ChatGPT
+  - RULE-SET,meta_domain,💢 Meta
+  - RULE-SET,cloudflare_domain,🐛 cloudflare
+  - RULE-SET,pornhub_domain,💞 pornhub
   - RULE-SET,github_domain,👨🏿‍💻 GitHub
   - RULE-SET,youtube_domain,📹 YouTube
   - RULE-SET,google_domain,🍀 Google
@@ -147,6 +161,8 @@ rules:
   - RULE-SET,paypal_domain,💶 PayPal
   - RULE-SET,geolocation-!cn,🚀 节点选择
   - RULE-SET,cn_domain,🎯 全球直连
+  - RULE-SET,private_ip,🎯 全球直连,no-resolve
+  - RULE-SET,cloudflare_ip,🐛 cloudflare,no-resolve
   - RULE-SET,google_ip,🍀 Google,no-resolve
   - RULE-SET,netflix_ip,🎥 NETFLIX,no-resolve
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
@@ -163,6 +179,7 @@ rule-providers:
   ai: {!!merge <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/AI.list"}
   youtube_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
+  pornhub_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pornhub.mrs"}
   github_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
   telegram_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
   netflix_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
@@ -173,8 +190,12 @@ rule-providers:
   speedtest_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ookla-speedtest.mrs"}
   tiktok_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
   gfw_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/gfw.mrs"}
+  meta_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/meta.mrs"}
   geolocation-!cn: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
   cn_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}  
+  cloudflare_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cloudflare.mrs"}
+  cloudflare_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cloudflare.mrs"}
+  private_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
   cn_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
   google_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
   telegram_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
