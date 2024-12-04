@@ -5,7 +5,7 @@ redir-port: 7892
 mixed-port: 7893
 tproxy-port: 7894
 ipv6: false
-allow-lan: true 
+allow-lan: true
 unified-delay: true
 tcp-concurrent: true
   
