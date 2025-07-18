@@ -210,10 +210,9 @@ rules:
   - RULE-SET,telegram_domain,📲 Telegram
 
   # 代理分流
-  - RULE-SET,proxylite,🚀 节点选择
-  - RULE-SET,geolocation-!cn,🚀 节点选择
   - RULE-SET,meta_domain,💢 Meta
   - RULE-SET,ai,🤖 ChatGPT
+  - RULE-SET,telegram_ip,📲 Telegram,no-resolve
 
   # 其他规则集
   - RULE-SET,cloudflare_domain,🐛 cloudflare
@@ -224,8 +223,9 @@ rules:
   - RULE-SET,paypal_domain,💶 PayPal
 
 # 区域分流规则最后
+  - RULE-SET,proxylite,🚀 节点选择
+  - RULE-SET,geolocation-!cn,🚀 节点选择
   - RULE-SET,cn_domain,🎯 全球直连
-  - RULE-SET,telegram_ip,📲 Telegram,no-resolve
   - RULE-SET,cn_ip,🎯 全球直连,no-resolve
 
  # 最后兜底
