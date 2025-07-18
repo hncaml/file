@@ -194,7 +194,8 @@ rules:
   - RULE-SET,private_domain,🟢 直连
   - RULE-SET,private_ip,🟢 直连,no-resolve
 
-  # 系统/推送服务提前
+  # 系统/推送服务提前,youtube要放在google前面
+  - RULE-SET,youtube_domain,📹 YouTube
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,google_domain,🍀 Google
   - RULE-SET,google_ip,🍀 Google,no-resolve
