@@ -198,6 +198,8 @@ rules:
   - RULE-SET,apple_domain,🍎 Apple
   - RULE-SET,google_domain,🍀 Google
   - RULE-SET,google_ip,🍀 Google,no-resolve
+  # Microsoft里面包含了github，所以要放前面
+  - RULE-SET,github_domain,👨🏿‍💻 GitHub
   - RULE-SET,microsoft_domain,🪟 Microsoft
 
   # 高流量业务优先
