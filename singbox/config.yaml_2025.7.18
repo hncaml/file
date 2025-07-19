@@ -75,7 +75,19 @@ sniffer:
     - "+.ads.*.*"
     - "+.analytics.*.*"
     - "rule-set:ad_domain"
-    - "rule-set:iot_domain"
+  # 添加常见的 IoT 设备域名
+    - "+.mi.com"
+    - "+.xiaomi.com"
+    - "+.huawei.com"
+    - "+.lg.com"
+    - "+.sony.com"
+    - "+.philips.com"
+    - "+.ikea.com"
+    - "+.nest.com"
+    - "+.alexa.com"
+    - "+.tuya.com"
+    - "+.smartthings.com"
+
   route-exclude-addrss-set:
     - "rule-set:cn_ip"
     
@@ -139,15 +151,14 @@ proxies:
   udp: true
  
 # 锚点
-pr: &pr {type: select, proxies: [🚀 节点选择, ♻️ 香港自动, ♻️ 日本自动,♻️ 新加坡自动, ♻️ 美国自动,♻️ 英国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 英国故转,🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, uk 英国节点,🌐 全部节点, 🟢 直连]}
+pr: &pr {type: select, proxies: [🚀 节点选择, ♻️ 香港自动, ♻️ 日本自动,♻️ 新加坡自动, ♻️ 美国自动,♻️ 韩国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 韩国故转,🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, KR 韩国节点,🌐 全部节点, 🟢 直连]}
 # 策略组
 proxy-groups:
-  - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动,♻️ 英国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 英国故转, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, uk 英国节点,🌐 全部节点, 🟢 直连]}
+  - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动,♻️ 韩国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 韩国故转, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, KR 韩国节点,🌐 全部节点, 🟢 直连]}
   - {name: 📹 YouTube,!!merge <<: *pr}
   - {name: 🐛 cloudflare,!!merge <<: *pr}
   - {name: 💞 pornhub,!!merge <<: *pr}
   - {name: 🍀 Google,!!merge <<: *pr}
-  - {name: 🤖 ChatGPT,!!merge <<: *pr}
   - {name: 💢 Meta,!!merge <<: *pr}
   - {name: 👨🏿‍💻 GitHub,!!merge <<: *pr}
   - {name: 🐬 OneDrive,!!merge <<: *pr}
@@ -164,17 +175,17 @@ proxy-groups:
   - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)日|jp|japan"}
   - {name: SG 新加坡节点, type: select, include-all: true, filter: "(?i)新|sg|SG|Singapore"}
   - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)美|us|united states|united states"}
-  - {name: uk 英国节点, type: select, include-all: true, filter: "(?i)英|uk|UK|United Kingdom"}
+  - {name: KR 韩国节点, type: select, include-all: true, filter: "(?i)韩|kr|KR|South Korea|Korea"}
   - {name: 🔯 香港故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
   - {name: 🔯 日本故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }  
   - {name: 🔯 新加坡故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }  
   - {name: 🔯 美国故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$" }  
-  - {name: 🔯 英国故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(英|uk|(?i)UK|Kingdom))^((?!(港|台|日|韩|新)).)*$" }  
+  - {name: 🔯 韩国故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$" }  
   - {name: ♻️ 香港自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
   - {name: ♻️ 日本自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }
   - {name: ♻️ 新加坡自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }
   - {name: ♻️ 美国自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$"}
-  - {name: ♻️ 英国自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(英|uk|(?i)UK|Kingdom))^((?!(港|台|日|韩|新)).)*$"}
+  - {name: ♻️ 韩国自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$"}
   - {name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "^((?!(直连)).)*$"}
   - {name: 🌐 全部节点, type: select, include-all: true}
 
@@ -211,7 +222,6 @@ rules:
 
   # 代理分流
   - RULE-SET,meta_domain,💢 Meta
-  - RULE-SET,ai,🤖 ChatGPT
   - RULE-SET,telegram_ip,📲 Telegram,no-resolve
 
   # 其他规则集
@@ -238,9 +248,8 @@ rule-anchor:
   class: &class {type: http, interval: 86400, behavior: classical, format: text}
 rule-providers: 
   private_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
-  proxylite: {!!merge <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/ProxyLite.list"}
-  ai: {!!merge <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/AI.list"}
-  youtube_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  proxylite: {!!merge <<: *class, url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"}
+   youtube_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   pornhub_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pornhub.mrs"}
   github_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
@@ -263,5 +272,6 @@ rule-providers:
   google_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
   telegram_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   netflix_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
-  ad_domain: {!!merge <<: *class, url: "https://raw.githubusercontent.com/yourrepo/ad-skip.list"}
-  iot_domain: {!!merge <<: *class, url: "https://raw.githubusercontent.com/yourrepo/iot-skip.list"}
+  ad_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs"}
+
+
