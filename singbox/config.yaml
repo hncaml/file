@@ -8,7 +8,7 @@ proxy-providers:
       url: https://www.gstatic.com/generate_204
       interval: 300
     proxy: 🟢 直连
-    url: "https://hn.zjca.dpdns.org/cazxyy" 
+    url: "  " 
 
 # 用于下载订阅时指定UA
 global-ua: mihomo
