@@ -14,18 +14,18 @@ proxy-providers:
 global-ua: mihomo
     
 # 全局配置
-port: 7890
-socks-port: 7891
-redir-port: 7892
-mixed-port: 7893
-tproxy-port: 7894
+port: 6300
+socks-port: 6301
+redir-port: 6302
+mixed-port: 6303
+tproxy-port: 6304
 ipv6: false
 allow-lan: true
 unified-delay: true
 tcp-concurrent: true
   
 # 控制面板
-external-controller: 0.0.0.0:9095
+external-controller: 0.0.0.0:6305
 secret: ""
 external-ui: ui
 external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
