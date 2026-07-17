@@ -86,7 +86,6 @@ sniffer:
     - "+.alexa.com"
     - "+.tuya.com"
     - "+.smartthings.com"
-  # 【修复】移除了这里拼写错误且位置不对的 route-exclude-addrss-set
     
 # 代理模式
 tun:
@@ -99,10 +98,7 @@ tun:
   auto-route: true
   auto-redirect: true
   auto-detect-interface: true
-  # 【修复】将排除国内 IP 绕过 TUN 的设置移动到这里 ，并修正了拼写
-  route-exclude-address-set:
-    - "rule-set:cn_ip"
-  
+
 # DNS模块
 dns:
   enable: true
