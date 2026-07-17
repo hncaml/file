@@ -8,8 +8,9 @@ proxy-providers:
       url: https://www.gstatic.com/generate_204
       interval: 300
     proxy: 🟢 直连
-    url: "  " 
-
+    url: "" 
+    override:
+      client-fingerprint: chrome
 # 用于下载订阅时指定UA
 global-ua: mihomo
     
@@ -32,7 +33,6 @@ external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-
 
 # 匹配进程 always/strict/off
 find-process-mode: off
-global-client-fingerprint: chrome
 keep-alive-idle: 600
 keep-alive-interval: 30
 
@@ -86,9 +86,7 @@ sniffer:
     - "+.alexa.com"
     - "+.tuya.com"
     - "+.smartthings.com"
-
-  route-exclude-addrss-set:
-    - "rule-set:cn_ip"
+  # 【修复】移除了这里拼写错误且位置不对的 route-exclude-addrss-set
     
 # 代理模式
 tun:
@@ -101,6 +99,9 @@ tun:
   auto-route: true
   auto-redirect: true
   auto-detect-interface: true
+  # 【修复】将排除国内 IP 绕过 TUN 的设置移动到这里 ，并修正了拼写
+  route-exclude-address-set:
+    - "rule-set:cn_ip"
   
 # DNS模块
 dns:
@@ -110,7 +111,7 @@ dns:
   cache-size: 4096
   respect-rules: true
   enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
+  fake-ip-range: 198.18.0.1/16 # 【优化】改为标准的 Fake-IP 保留网段
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - "+.lan"
@@ -151,6 +152,7 @@ proxies:
  
 # 锚点
 pr: &pr {type: select, proxies: [🚀 节点选择, ♻️ 香港自动, ♻️ 日本自动,♻️ 新加坡自动, ♻️ 美国自动,♻️ 韩国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 韩国故转,🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, KR 韩国节点,🌐 全部节点, 🟢 直连]}
+
 # 策略组
 proxy-groups:
   - {name: 🚀 节点选择, type: select, proxies: [♻️ 香港自动, ♻️ 日本自动, ♻️ 新加坡自动,♻️ 美国自动,♻️ 韩国自动, ♻️ 自动选择, 🔯 香港故转,🔯 日本故转,🔯 新加坡故转,🔯 美国故转,🔯 韩国故转, 🇭🇰 香港节点, 🇯🇵 日本节点, SG 新加坡节点, 🇺🇲 美国节点, KR 韩国节点,🌐 全部节点, 🟢 直连]}
@@ -169,27 +171,30 @@ proxy-groups:
   - {name: ✈️ Speedtest,!!merge <<: *pr}
   - {name: 💶 PayPal,!!merge <<: *pr}
   - {name: 🍎 Apple, type: select, proxies: [🟢 直连, 🚀 节点选择]}
-  # 取消全球直连，直接使用直连
   - {name: 🐟 漏网之鱼,!!merge <<: *pr}
   - {name: 🇭🇰 香港节点, type: select, include-all: true, filter: "(?i)港|hk|hongkong|hong kong"}
   - {name: 🇯🇵 日本节点, type: select, include-all: true, filter: "(?i)日|jp|japan"}
   - {name: SG 新加坡节点, type: select, include-all: true, filter: "(?i)新|sg|SG|Singapore"}
   - {name: 🇺🇲 美国节点, type: select, include-all: true, filter: "(?i)美|us|united states|united states"}
   - {name: KR 韩国节点, type: select, include-all: true, filter: "(?i)韩|kr|KR|South Korea|Korea"}
-  - {name: 🔯 香港故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
-  - {name: 🔯 日本故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }  
-  - {name: 🔯 新加坡故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }  
-  - {name: 🔯 美国故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$" }  
-  - {name: 🔯 韩国故转, type: fallback, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$" }  
-  - {name: ♻️ 香港自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
-  - {name: ♻️ 日本自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }
-  - {name: ♻️ 新加坡自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }
-  - {name: ♻️ 美国自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$"}
-  - {name: ♻️ 韩国自动, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$"}
-  - {name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 20, interval: 600, filter: "^((?!(直连)).)*$"}
+  # 【优化】将 tolerance 从 20 放宽到 50，避免网络微小波动导致频繁切换节点
+  - {name: 🔯 香港故转, type: fallback, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
+  - {name: 🔯 日本故转, type: fallback, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }  
+  - {name: 🔯 新加坡故转, type: fallback, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }  
+  - {name: 🔯 美国故转, type: fallback, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$" }  
+  - {name: 🔯 韩国故转, type: fallback, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$" }  
+  - {name: ♻️ 香港自动, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"}
+  - {name: ♻️ 日本自动, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(日|JP|(?i)Japan))^((?!(港|台|韩|新|美)).)*$" }
+  - {name: ♻️ 新加坡自动, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(新|SG|(?i)Singapore))^((?!(港|台|韩|日|美)).)*$" }
+  - {name: ♻️ 美国自动, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(美|US|(?i)States|America))^((?!(港|台|日|韩|新)).)*$"}
+  - {name: ♻️ 韩国自动, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "(?=.*(韩|kr|KR|South Korea|Korea))^((?!(港|台|日|英|新)).)*$"}
+  - {name: ♻️ 自动选择, type: url-test, include-all: true, tolerance: 50, interval: 600, filter: "^((?!(直连)).)*$"}
   - {name: 🌐 全部节点, type: select, include-all: true}
 
 rules:
+  # 【修复】补充了广告拦截规则，否则下载了 ad_domain 规则集也无法生效
+  - RULE-SET,ad_domain,REJECT
+
   # 高频直连或拒绝提前
   - DOMAIN-SUFFIX,lan,🟢 直连
   - DOMAIN-SUFFIX,local,🟢 直连
@@ -232,13 +237,13 @@ rules:
   - RULE-SET,speedtest_domain,✈️ Speedtest
   - RULE-SET,paypal_domain,💶 PayPal
 
-# 区域分流规则最后
+  # 区域分流规则最后
   - RULE-SET,proxylite,🚀 节点选择
   - RULE-SET,geolocation-!cn,🚀 节点选择
   - RULE-SET,cn_domain,🟢 直连
   - RULE-SET,cn_ip,🟢 直连,no-resolve
 
- # 最后兜底
+  # 最后兜底
   - MATCH,🐟 漏网之鱼
 
 rule-anchor:
@@ -246,6 +251,7 @@ rule-anchor:
   domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
   #qcy: &qcy {type: http, interval: 86400, behavior: domain, format: text}
   class: &class {type: http, interval: 86400, behavior: classical, format: text}
+
 rule-providers: 
   private_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
   proxylite: {!!merge <<: *class, url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"}
@@ -274,4 +280,4 @@ rule-providers:
   telegram_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
   netflix_ip: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
   ad_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs"}
-  
+
