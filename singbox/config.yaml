@@ -3,16 +3,26 @@ proxy-providers:
   Airport_01:
     type: http
     interval: 43200
+    timeout: 20000
+    header:
+      User-Agent:
+        - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204
       interval: 300
+      timeout: 5000
     proxy: 🟢 直连
     url: "" 
     override:
       client-fingerprint: chrome
-# 用于下载订阅时指定UA
-global-ua: mihomo
+# 【安全2】强制关闭所有节点的 UDP 传输！彻底杜绝局域网 P2P 流量漏电触发 DoS 报警
+    udp: false 
+
+global-ua: clash
+
+# 【新增】全局强制开启 TLS 浏览器指纹伪装
+global-client-fingerprint: chrome
     
 # 全局配置
 port: 6300
@@ -55,7 +65,7 @@ sniffer:
   force-domain:
     - "+.v2ex.com"
   skip-domain:
-    - "rule-set:private_domain,cn_domain"
+#    - "rule-set:private_domain,cn_domain"
     - "Mijia Cloud"
     - "dlg.io.mi.com"
     - "+.push.apple.com"
@@ -86,6 +96,7 @@ sniffer:
     - "+.alexa.com"
     - "+.tuya.com"
     - "+.smartthings.com"
+  # 【修复】移除了这里拼写错误且位置不对的 route-exclude-addrss-set
     
 # 代理模式
 tun:
@@ -98,7 +109,10 @@ tun:
   auto-route: true
   auto-redirect: true
   auto-detect-interface: true
-
+  # 【修复】将排除国内 IP 绕过 TUN 的设置移动到这里 ，并修正了拼写
+#  route-exclude-address-set:
+#    - "rule-set:cn_ip"
+  
 # DNS模块
 dns:
   enable: true
@@ -124,10 +138,10 @@ dns:
     - "https://dns.cloudflare.com/dns-query"
     - "https://dns.google/dns-query"
     - "https://dns.alidns.com/dns-query"
-    - "https://doh.360.cn/dns-query"
-    - "223.5.5.5"
-    - "119.29.29.29"
-    - "114.114.114.114"
+#    - "https://doh.360.cn/dns-query"
+#    - "223.5.5.5"
+#    - "119.29.29.29"
+#    - "114.114.114.114"
   proxy-server-nameserver:
     - "https://dns.cloudflare.com/dns-query"
     - "https://dns.google/dns-query"
@@ -191,7 +205,30 @@ rules:
   # 【修复】补充了广告拦截规则，否则下载了 ad_domain 规则集也无法生效
   - RULE-SET,ad_domain,REJECT
 
-  # 高频直连或拒绝提前
+  # 【允许 NAS 刮削海报】如果您用飞牛影视中心，这几行必须放在 NAS 直连规则的上面
+  - DOMAIN-SUFFIX,themoviedb.org,🚀 节点选择
+  - DOMAIN-SUFFIX,tmdb.org,🚀 节点选择
+  - DOMAIN-SUFFIX,tvdb.com,🚀 节点选择
+  - DOMAIN-SUFFIX,fanart.tv,🚀 节点选择
+  
+  # 【核心防御】精准锁定飞牛 NAS，将其余所有流量（包括 BT 下载）强制直连！
+#  - SRC-IP-CIDR,192.168.1.24/32,🟢 直连
+
+  # 拦截 meta_domain 集合中的 UDP 443 端口，强制 Meta 设备降级使用 TCP 下载固件（解决更新卡死）
+#  - AND,((NETWORK,UDP),(DEST-PORT,443),(RULE-SET,meta_domain)),REJECT
+
+  # 【新增】秒拒 QUIC 流量，强制浏览器瞬间回退到 TCP (HTTP/2)，提升网页秒开速度
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
+  - AND,((NETWORK,UDP),(DST-PORT,8443)),REJECT
+
+  # 【网关专用】防止局域网设备（如 NAS、电脑）BT 下载走代理消耗机场流量
+  - DST-PORT,6881-6889,🟢 直连
+  - DST-PORT,51413,🟢 直连
+  - DST-PORT,1900,🟢 直连
+  - DST-PORT,5353,🟢 直连
+#  - IP-ASN,20473,🟢 直连,no-resolve
+  
+# 高频直连或拒绝提前
   - DOMAIN-SUFFIX,lan,🟢 直连
   - DOMAIN-SUFFIX,local,🟢 直连
   - DOMAIN-SUFFIX,qq.com,🟢 直连
@@ -250,8 +287,8 @@ rule-anchor:
 
 rule-providers: 
   private_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
-  proxylite: {!!merge <<: *class, url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"}
-  #ai: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/ai.mrs"}
+  proxylite: {type: http, interval: 86400, behavior: domain, format: text, url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"}
+#ai: {!!merge <<: *ip, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/ai.mrs"}
   youtube_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
   pornhub_domain: {!!merge <<: *domain, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pornhub.mrs"}
