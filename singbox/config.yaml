@@ -3,10 +3,6 @@ proxy-providers:
   Airport_01:
     type: http
     interval: 43200
-    timeout: 20000
-    header:
-      User-Agent:
-        - "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204
