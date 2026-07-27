@@ -206,12 +206,15 @@ rules:
   - DOMAIN-SUFFIX,tmdb.org,🚀 节点选择
   - DOMAIN-SUFFIX,tvdb.com,🚀 节点选择
   - DOMAIN-SUFFIX,fanart.tv,🚀 节点选择
+    # 如果 NAS 里有 Docker 需要拉取镜像，也可以在这里放行
+  - DOMAIN-SUFFIX,docker.com,🚀 节点选择
+
   
   # 【核心防御】精准锁定飞牛 NAS，将其余所有流量（包括 BT 下载）强制直连！
 #  - SRC-IP-CIDR,192.168.1.24/32,🟢 直连
 
   # 拦截 meta_domain 集合中的 UDP 443 端口，强制 Meta 设备降级使用 TCP 下载固件（解决更新卡死）
-#  - AND,((NETWORK,UDP),(DEST-PORT,443),(RULE-SET,meta_domain)),REJECT
+#  - AND,((NETWORK,UDP),(DST-PORT,443),(RULE-SET,meta_domain)),REJECT
 
   # 【新增】秒拒 QUIC 流量，强制浏览器瞬间回退到 TCP (HTTP/2)，提升网页秒开速度
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
